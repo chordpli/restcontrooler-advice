@@ -4,6 +4,8 @@ import com.restcontroller.advice.domain.User;
 import com.restcontroller.advice.domain.dto.UserDto;
 import com.restcontroller.advice.domain.dto.UserJoinRequest;
 import com.restcontroller.advice.domain.dto.UserLoginRequest;
+import com.restcontroller.advice.exception.ErrorCode;
+import com.restcontroller.advice.exception.UserAppException;
 import com.restcontroller.advice.repository.UserRepository;
 import com.restcontroller.advice.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +37,11 @@ public class UserService {
     public String login(UserLoginRequest dto) {
         // user name 확인
         User user = userRepository.findByUserName(dto.getUserName())
-                .orElseThrow(RuntimeException::new);
-
+                .orElseThrow(
+                        () -> new UserAppException(ErrorCode.NOT_FOUND, String.format("%s는 회원이 아닙니다.", dto.getUserName())));
         // password 일치
         if (!encoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new RuntimeException();
+            throw new UserAppException(ErrorCode.INVALID_PASSWORD, String.format("userName 또는 password가 일치하지 않습ㄴ디ㅏ."));
         }
 
         return JwtTokenUtil.createToken(dto.getUserName(), secretKey, expireTimeMs);
