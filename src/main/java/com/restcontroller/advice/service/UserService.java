@@ -27,6 +27,12 @@ public class UserService {
     private long expireTimeMs = 1000 * 60 * 60;
 
     public UserDto join(UserJoinRequest dto) {
+
+        userRepository.findByUserName(dto.getUserName())
+                .ifPresent(user ->{
+                    throw new UserAppException(ErrorCode.DUPLICATED_USER_NAME, String.format("userName = %s", dto.getUserName()));
+                });
+
         User savedUser = userRepository.save(dto.toEntity(encoder.encode(dto.getPassword())));
         return UserDto.builder()
                 .userName(savedUser.getUserName())
