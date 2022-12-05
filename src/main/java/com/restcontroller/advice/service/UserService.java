@@ -10,7 +10,6 @@ import com.restcontroller.advice.repository.UserRepository;
 import com.restcontroller.advice.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +50,10 @@ public class UserService {
         }
 
         return JwtTokenUtil.createToken(dto.getUserName(), secretKey, expireTimeMs);
+    }
+
+    public User getUserByUserName(String userName) {
+        return userRepository.findByUserName(userName)
+                .orElseThrow(()-> new UserAppException(ErrorCode.NOT_FOUND, ""));
     }
 }
