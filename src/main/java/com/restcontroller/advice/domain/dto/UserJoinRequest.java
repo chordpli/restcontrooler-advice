@@ -1,6 +1,7 @@
 package com.restcontroller.advice.domain.dto;
 
 import com.restcontroller.advice.domain.User;
+import com.restcontroller.advice.domain.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class UserJoinRequest {
                 .userName(this.userName)
                 .password(password)
                 .emailAddress(this.emailAddress)
+                .role(UserRole.USER)
                 .build();
     }
 }
