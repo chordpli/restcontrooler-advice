@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -23,5 +20,8 @@ public class User {
     private String userName;
     private String password;
     private String emailAddress;
+    
+    @Enumerated(EnumType.STRING) // String type으로 바꿔서
+    private UserRole role;
 
 }
